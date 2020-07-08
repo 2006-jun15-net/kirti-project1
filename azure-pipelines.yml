@@ -12,9 +12,38 @@ pr:
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+  solutionPath: CarStore
+
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'sonarcloud-kirtipatel98'
+    organization: '2006-jun15-net'
+    scannerMode: 'MSBuild'
+    projectKey: '2006-jun15-net_kirti-project1'
+    projectName: 'Kirti project1 Car Store'
+
+- script: dotnet build -c Release
+  displayName: dotnet build
+  workingDirectory: $(solutionPath)
+
+- task: SonarCloudAnalyze@1
+
+- task: SonarCloudPublish@1
+  inputs:
+    pollingTimeoutSec: '300'
+
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Azure subscription 1(a8f0024b-b40d-44a8-8a01-2d63b02fb4c7)'
+    appType: 'webApp'
+    WebAppName: '2006-project1'
+    deployToSlotOrASE: true
+    ResourceGroupName: '2006-training-rg'
+    SlotName: 'production'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
 
 - script: |
     echo Add other tasks to build, test, and deploy your project.
