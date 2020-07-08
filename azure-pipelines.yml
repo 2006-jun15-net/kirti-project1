@@ -15,8 +15,16 @@ pool:
 variables:
   solutionPath: CarStore
 
+jobs:
+- job: build_linux
+  # pool section defines what agent the job will run on
+  pool:
+    # get a microsoft-hosted agent running the latest ubuntu linux.
+    vmImage: 'ubuntu-latest'
+
 steps:
 - task: SonarCloudPrepare@1
+  displayName: sonarcloud prepare analysis
   inputs:
     SonarCloud: 'sonarcloud-kirtipatel98'
     organization: '2006-jun15-net'
@@ -29,21 +37,34 @@ steps:
   workingDirectory: $(solutionPath)
 
 - task: SonarCloudAnalyze@1
+  displayName: sonarcloud prepare analysis
 
 - task: SonarCloudPublish@1
+  displayName: sonarcloud prepare analysis
   inputs:
     pollingTimeoutSec: '300'
 
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: 'Cobertura'
+    summaryFileLocation: '$(Agent.TempDirectory)/*/coverage.cobertura.xml'
+    failIfCoverageEmpty: true
+
+- script: dotnet build -c Release -o ../publish
+  displayName: dotnet build
+  workingDirectory: $(solutionPath)
+
 - task: AzureRmWebAppDeployment@4
+  displayName: azure app service deploy
   inputs:
     ConnectionType: 'AzureRM'
     azureSubscription: 'Azure subscription 1(a8f0024b-b40d-44a8-8a01-2d63b02fb4c7)'
     appType: 'webApp'
     WebAppName: '2006-project1'
-    deployToSlotOrASE: true
-    ResourceGroupName: '2006-training-rg'
-    SlotName: 'production'
-    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    # deployToSlotOrASE: true
+    # ResourceGroupName: '2006-training-rg'
+    # SlotName: 'production'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/publish'
 
 - script: |
     echo Add other tasks to build, test, and deploy your project.
