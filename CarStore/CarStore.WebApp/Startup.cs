@@ -28,7 +28,7 @@ namespace CarStore.WebApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<Project0Context>(options =>
-                            options.UseSqlServer(Configuration.GetConnectionString("SqlServer")));
+                options.UseSqlServer(Configuration.GetConnectionString("SqlServer")));
 
             services.AddScoped<ICustomer, CustomerRepo>();
             services.AddScoped<IOrders, OrdersRepo>();

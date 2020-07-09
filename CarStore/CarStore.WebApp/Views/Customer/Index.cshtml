@@ -1,0 +1,67 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model IEnumerable<CarStore.WebApp.Models.CustomerViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+    <div class="text-center">
+
+        <h1>Current Customers</h1>
+
+        <div>
+            <form asp-action="Index" method="GET" class="form-inline">
+                <label class="sr-only" for="search">Customer search:</label>
+                <input type="search" class="form-control mb-2 mr-sm-2 mb-sm-0" id="search" name="search" />
+                <button type="submit" class="btn btn-primary">submit</button>
+            </form>
+        </div>
+
+        <p>
+            <a class="text-primary" asp-action="Create">Add New Customer</a>
+        </p>
+
+        <div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CustomerId)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FirstName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.LastName)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CustomerId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FirstName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LastName)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Edit", "Edit", new { id = item.CustomerId }) |
+                                @Html.ActionLink("Details", "Details", new { id = item.CustomerId })
+                            </td>
+                        </tr>
+                     }
+                </tbody>
+            </table>
+        </div>
+
+
+    </div>

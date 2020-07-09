@@ -20,15 +20,16 @@ namespace CarStore.WebApp.Controllers
             _customer = customer ?? throw new ArgumentNullException(nameof(customer));
         }
 
+
         // GET: /<controller>/
         [HttpGet]
-        public IActionResult AddCustomer()
+        public IActionResult Index()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult RegisterCustomer([Bind("FirstName, LastName")] CustomerViewModel customerViewModel)
+        public IActionResult Index([Bind("FirstName, LastName")] CustomerViewModel customerViewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -62,6 +63,54 @@ namespace CarStore.WebApp.Controllers
                 LastName = customer.LastName,
             };
             return View(customerViewModel);
+        }
+
+        public IActionResult Search(string search = null)
+        {
+            if (search != null)
+            {
+                if (_customer.GetAll().Any(c => c.FirstName.Equals(search)))
+                {
+                    return RedirectToAction(nameof(Details), new { fName = search });
+                }
+                return View();
+            }
+            return View();
+        }
+
+        public IActionResult Edit([FromRoute] string name)
+        {
+            Customer customer = _customer.GetByName(name);
+            var viewModel = new CustomerViewModel
+            {
+                FirstName = customer.FirstName,
+                LastName = customer.LastName,
+            };
+            return View(viewModel);
+
+        }
+
+        [HttpPost]
+        public IActionResult Edit([Bind("FirstName, LastName")] CustomerViewModel customerViewModel, [FromRoute] string name)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    Customer customer = _customer.GetByName(name);
+                    customer.FirstName = customerViewModel.FirstName;
+                    customer.LastName = customerViewModel.LastName;
+                    _customer.Update(customer);
+
+                    return RedirectToAction(nameof(Details), new { fName = customer.FirstName });
+                }
+                return View(customerViewModel);
+            }
+            catch (Exception)
+            {
+                return View(customerViewModel);
+            }
+
         }
     }
 }

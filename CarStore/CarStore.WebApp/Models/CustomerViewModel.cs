@@ -5,6 +5,10 @@ namespace CarStore.WebApp.Models
 {
     public class CustomerViewModel
     {
+        [Display(Name = "ID")]
+        [Required]
+        public string CustomerId { get; set; }
+
         [Display(Name = "First Name")]
         [MaxLength(26)]
         [Required]
