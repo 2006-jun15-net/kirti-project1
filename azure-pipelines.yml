@@ -25,6 +25,7 @@ jobs:
       scannerMode: 'MSBuild'
       projectKey: '2006-jun15-net_kirti-project1'
       projectName: 'Kirti project1 Car Store'
+      extraProperties: 'sonar.exclusions=**/lib/**'
 
   - script: dotnet build -c Release
     displayName: dotnet build
