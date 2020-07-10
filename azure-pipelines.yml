@@ -45,8 +45,8 @@ jobs:
   #     summaryFileLocation: '$(Agent.TempDirectory)/*/coverage.cobertura.xml'
   #     failIfCoverageEmpty: true
 
-  - script: dotnet build -c Release -o ../publish
-    displayName: dotnet build
+  - script: dotnet publish -c Release -o ../publish
+    displayName: dotnet publish
     workingDirectory: $(solutionPath)
 
   - task: AzureRmWebAppDeployment@4
