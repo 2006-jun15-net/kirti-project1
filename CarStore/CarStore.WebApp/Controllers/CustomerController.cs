@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using CarStore.Library.Interfaces;
 using CarStore.Library.Model;
 using CarStore.WebApp.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -130,7 +132,19 @@ namespace CarStore.WebApp.Controllers
             {
                 return View(customerViewModel);
             }
+        }
 
+        public IActionResult Delete(int id, [BindNever] IFormCollection collection)
+        {
+            try
+            {
+                _customer.DeleteCustomer(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
         }
     }
 }

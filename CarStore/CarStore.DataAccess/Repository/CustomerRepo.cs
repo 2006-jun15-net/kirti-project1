@@ -74,7 +74,6 @@ namespace CarStore.DataAccess.Repository
             };
         }
 
-        //might get rid of it 
         public void Update(Customer customer)
         {
             var currentCustomer = _context.Customer.Find(customer.CustomerId);
@@ -87,6 +86,13 @@ namespace CarStore.DataAccess.Repository
             };
 
             _context.Entry(currentCustomer).CurrentValues.SetValues(updateCustomer);
+            _context.SaveChanges();
+        }
+
+        public void DeleteCustomer(int customerId)
+        {
+            Model.Customer customer = _context.Customer.Find(customerId);
+            _context.Remove(customer);
             _context.SaveChanges();
         }
     }
