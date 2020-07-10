@@ -8,7 +8,9 @@ namespace CarStore.Library.Interfaces
     {
         IEnumerable<Customer> GetAll();
 
-        Customer GetByName(string firstName);
+        IEnumerable<Customer> GetCustomers(string search = null);
+
+        Customer GetById(int id);
 
         void AddCustomer(Customer customer);
 

@@ -28,7 +28,8 @@ namespace CarStore.WebApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<Project0Context>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("SqlServer")));
+                            options.UseSqlServer("Server=tcp:patel.database.windows.net,1433;Initial Catalog=Project0;Persist Security Info=False;User ID=kirti;Password=Swamishreeji1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"));
+            //options.UseSqlServer(Configuration.GetConnectionString("SqlServer")));
 
             services.AddScoped<ICustomer, CustomerRepo>();
             services.AddScoped<IOrders, OrdersRepo>();

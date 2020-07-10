@@ -7,7 +7,7 @@ namespace CarStore.WebApp.Models
     {
         [Display(Name = "ID")]
         [Required]
-        public string CustomerId { get; set; }
+        public int CustomerId { get; set; }
 
         [Display(Name = "First Name")]
         [MaxLength(26)]

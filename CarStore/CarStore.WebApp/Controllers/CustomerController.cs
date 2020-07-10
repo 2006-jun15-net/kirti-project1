@@ -20,16 +20,32 @@ namespace CarStore.WebApp.Controllers
             _customer = customer ?? throw new ArgumentNullException(nameof(customer));
         }
 
-
         // GET: /<controller>/
-        [HttpGet]
-        public IActionResult Index()
+        //[HttpGet]
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}
+
+        public ActionResult Index([FromQuery] string search = "")
+        {
+            var customers = _customer.GetCustomers(search);
+            var viewModel = customers.Select(a => new CustomerViewModel
+            {
+                CustomerId = a.CustomerId,
+                FirstName = a.FirstName,
+                LastName = a.LastName
+            });
+            return View(viewModel);
+        }
+
+        public IActionResult Create ()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Index([Bind("FirstName, LastName")] CustomerViewModel customerViewModel)
+        public IActionResult Create([Bind("FirstName, LastName")] CustomerViewModel customerViewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -45,27 +61,30 @@ namespace CarStore.WebApp.Controllers
                 };
 
                 _customer.AddCustomer(customer);
-                return RedirectToAction(nameof(Details), new { FirstName = customer.FirstName });
+
+
+                return RedirectToAction(nameof(Index));
             }
             catch (Exception)
             {
                 ModelState.AddModelError("", "Error, try again.");
-                return View();
+                return View(customerViewModel);
             }
         }
 
-        public IActionResult Details(string fName)
+        public IActionResult Details(int id)
         {
-            Customer customer = _customer.GetByName(fName);
+            var customer = _customer.GetById(id);
             var customerViewModel = new CustomerViewModel
             {
+                CustomerId = customer.CustomerId,
                 FirstName = customer.FirstName,
                 LastName = customer.LastName,
             };
             return View(customerViewModel);
         }
 
-        public IActionResult Search(string search = null)
+        public IActionResult Search (string search = null)
         {
             if (search != null)
             {
@@ -78,31 +97,32 @@ namespace CarStore.WebApp.Controllers
             return View();
         }
 
-        public IActionResult Edit([FromRoute] string name)
+        public IActionResult Edit(int id)
         {
-            Customer customer = _customer.GetByName(name);
-            var viewModel = new CustomerViewModel
+            Customer customer = _customer.GetById(id);
+            var customerViewModel = new CustomerViewModel
             {
+                CustomerId = customer.CustomerId,
                 FirstName = customer.FirstName,
                 LastName = customer.LastName,
             };
-            return View(viewModel);
+            return View(customerViewModel);
 
         }
 
         [HttpPost]
-        public IActionResult Edit([Bind("FirstName, LastName")] CustomerViewModel customerViewModel, [FromRoute] string name)
+        public IActionResult Edit([Bind("FirstName, LastName")] CustomerViewModel customerViewModel, [FromRoute] int id)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    Customer customer = _customer.GetByName(name);
+                    Customer customer = _customer.GetById(id);
                     customer.FirstName = customerViewModel.FirstName;
                     customer.LastName = customerViewModel.LastName;
                     _customer.Update(customer);
 
-                    return RedirectToAction(nameof(Details), new { fName = customer.FirstName });
+                    return RedirectToAction(nameof(Index));
                 }
                 return View(customerViewModel);
             }

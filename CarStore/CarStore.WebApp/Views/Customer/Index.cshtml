@@ -15,13 +15,15 @@
         <div>
             <form asp-action="Index" method="GET" class="form-inline">
                 <label class="sr-only" for="search">Customer search:</label>
-                <input type="search" class="form-control mb-2 mr-sm-2 mb-sm-0" id="search" name="search" />
-                <button type="submit" class="btn btn-primary">submit</button>
+                <input type="search" class="form-control mb-2 mr-sm-2 mb-sm-0" id="search" name="search" placeholder="Search"/>
+                <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>
 
         <p>
-            <a class="text-primary" asp-action="Create">Add New Customer</a>
+            <br />
+            <a asp-action="Create">Add New Customer</a>
+            <br />
         </p>
 
         <div>
@@ -37,7 +39,8 @@
                         <th>
                             @Html.DisplayNameFor(model => model.LastName)
                         </th>
-                        <th></th>
+                        <th>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -62,6 +65,5 @@
                 </tbody>
             </table>
         </div>
-
 
     </div>

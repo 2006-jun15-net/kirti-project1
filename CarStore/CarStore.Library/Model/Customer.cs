@@ -13,6 +13,13 @@ namespace CarStore.Library.Model
         {
         }
 
+        public Customer(int id, string fName, string lName)
+        {
+            CustomerId = id;
+            FirstName = fName;
+            LastName = lName;
+        }
+
         // private fields for first and last name and username to ensure the name is valid
         private string _fName;
         private string _lName;

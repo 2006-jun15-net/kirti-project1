@@ -52,9 +52,19 @@ namespace CarStore.DataAccess.Repository
             });
         }
 
-        public Customer GetByName(string firstName)
+        public IEnumerable<Customer> GetCustomers(string search = null)
         {
-            Model.Customer customer = _context.Customer.First(c => c.FirstName.Equals(firstName));
+            IQueryable<Model.Customer> items = _context.Customer;
+            if (search != null)
+            {
+                items = items.Where(r => r.FirstName.Contains(search));
+            }
+            return items.Select(e => new Customer(e.CustomerId, e.FirstName, e.LastName));
+        }
+
+        public Customer GetById(int id)
+        {
+            Model.Customer customer = _context.Customer.FirstOrDefault(c => c.CustomerId == id);
 
             return new Customer
             {
@@ -67,7 +77,17 @@ namespace CarStore.DataAccess.Repository
         //might get rid of it 
         public void Update(Customer customer)
         {
-            throw new NotImplementedException();
+            var currentCustomer = _context.Customer.Find(customer.CustomerId);
+
+            var updateCustomer = new Model.Customer
+            {
+                CustomerId = currentCustomer.CustomerId,
+                FirstName = customer.FirstName,
+                LastName = customer.LastName
+            };
+
+            _context.Entry(currentCustomer).CurrentValues.SetValues(updateCustomer);
+            _context.SaveChanges();
         }
     }
 }
