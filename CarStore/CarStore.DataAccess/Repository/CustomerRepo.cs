@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CarStore.DataAccess.Model;
+using CarStore.DataAccess.Model; 
 using CarStore.Library.Interfaces;
 using Customer = CarStore.Library.Model.Customer;
 
@@ -19,6 +19,10 @@ namespace CarStore.DataAccess.Repository
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
+        /// <summary>
+        /// Add new cusotmer
+        /// </summary>
+        /// <param name="customer"></param>
         public void AddCustomer(Customer customer)
         {
             var addCustomer = new Model.Customer
@@ -31,15 +35,10 @@ namespace CarStore.DataAccess.Repository
             _context.SaveChanges();
         }
 
-        //might get rid of it 
-        public void Delete(Customer customer)
-        {
-            var deleteCustomer = _context.Customer.First(c => c.FirstName.Equals(customer.FirstName));
-
-            _context.Customer.Remove(deleteCustomer);
-            _context.SaveChanges();
-        }
-
+        /// <summary>
+        /// Get all the customers
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<Customer> GetAll()
         {
             var customer = _context.Customer.ToList();
@@ -52,6 +51,11 @@ namespace CarStore.DataAccess.Repository
             });
         }
 
+        /// <summary>
+        /// get custoemrs 
+        /// </summary>
+        /// <param name="search"></param>
+        /// <returns></returns>
         public IEnumerable<Customer> GetCustomers(string search = null)
         {
             IQueryable<Model.Customer> items = _context.Customer;
@@ -62,6 +66,11 @@ namespace CarStore.DataAccess.Repository
             return items.Select(e => new Customer(e.CustomerId, e.FirstName, e.LastName));
         }
 
+        /// <summary>
+        /// get cusotmer by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public Customer GetById(int id)
         {
             Model.Customer customer = _context.Customer.FirstOrDefault(c => c.CustomerId == id);
@@ -74,6 +83,10 @@ namespace CarStore.DataAccess.Repository
             };
         }
 
+        /// <summary>
+        /// update cusotmer
+        /// </summary>
+        /// <param name="customer"></param>
         public void Update(Customer customer)
         {
             var currentCustomer = _context.Customer.Find(customer.CustomerId);
@@ -89,6 +102,10 @@ namespace CarStore.DataAccess.Repository
             _context.SaveChanges();
         }
 
+        /// <summary>
+        /// delete cusotmer 
+        /// </summary>
+        /// <param name="customerId"></param>
         public void DeleteCustomer(int customerId)
         {
             Model.Customer customer = _context.Customer.Find(customerId);

@@ -14,6 +14,10 @@ namespace CarStore.Library.Model
         private Customer _customerId;
         private decimal _price;
 
+        public Orders()
+        {
+        }
+
         public Orders(int orderId, DateTime? orderDate, Customer customer, Location location, decimal totalPrice)
         {
             OrderId = orderId;
@@ -23,15 +27,16 @@ namespace CarStore.Library.Model
             Price = totalPrice;
         }
 
-        public Orders(Location location, DateTime orderDate, Dictionary<Product, int> orderedProducts, Customer customer)
+        public Orders(Location location, DateTime orderDate, Dictionary<Product, int> orderedProducts, Customer customer, decimal totalPrice)
         {
             Location = location;
             OrderDate = orderDate;
             OrderLine = orderedProducts;
             Customer = customer;
+            Price = totalPrice;
         }
 
-        public Orders (Location location, Dictionary<Product, int> orderedProducts, Customer customer) : this (location, DateTime.Now, orderedProducts, customer)
+        public Orders (Location location, Dictionary<Product, int> orderedProducts, Customer customer, decimal totalPrice) : this (location, DateTime.Now, orderedProducts, customer, totalPrice)
         {
         }
 

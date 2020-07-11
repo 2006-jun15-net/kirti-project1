@@ -17,6 +17,10 @@ namespace CarStore.DataAccess.Repository
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
+        /// <summary>
+        /// get all the inventory
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<Stock> GetAll()
         {
             var stock = _context.Stock.ToList();

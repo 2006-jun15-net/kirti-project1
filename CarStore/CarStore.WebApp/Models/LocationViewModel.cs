@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace CarStore.WebApp.Models
@@ -13,5 +14,7 @@ namespace CarStore.WebApp.Models
         [MaxLength(255)]
         [Required]
         public string LocationName { get; set; }
+
+        public IEnumerable<OrderViewModel> Orders { get; set; }
     }
 }

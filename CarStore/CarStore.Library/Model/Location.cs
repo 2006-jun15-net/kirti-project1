@@ -15,6 +15,12 @@ namespace CarStore.Library.Model
         {
         }
 
+        public Location(int id, string name)
+        {
+            LocationId = id;
+            LocationName = name;
+        }
+
         /// <summary>
         /// location id
         /// </summary>

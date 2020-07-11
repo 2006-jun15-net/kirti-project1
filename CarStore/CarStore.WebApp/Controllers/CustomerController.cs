@@ -16,13 +16,17 @@ namespace CarStore.WebApp.Controllers
     public class CustomerController : Controller
     {
         private readonly ICustomer _customer;
+        private readonly IOrders _orders;
 
-        public CustomerController(ICustomer customer)
+
+        public CustomerController(ICustomer customer, IOrders order)
         {
             _customer = customer ?? throw new ArgumentNullException(nameof(customer));
+            _orders = order ?? throw new ArgumentNullException(nameof(order));
+
         }
 
-        // GET: /<controller>/
+        ////GET: /<controller>/
         //[HttpGet]
         //public IActionResult Index()
         //{
@@ -41,6 +45,7 @@ namespace CarStore.WebApp.Controllers
             return View(viewModel);
         }
 
+        [HttpGet]
         public IActionResult Create ()
         {
             return View();
@@ -67,9 +72,8 @@ namespace CarStore.WebApp.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            catch (Exception)
+            catch
             {
-                ModelState.AddModelError("", "Error, try again.");
                 return View(customerViewModel);
             }
         }
@@ -82,22 +86,23 @@ namespace CarStore.WebApp.Controllers
                 CustomerId = customer.CustomerId,
                 FirstName = customer.FirstName,
                 LastName = customer.LastName,
+               
             };
             return View(customerViewModel);
         }
 
-        public IActionResult Search (string search = null)
-        {
-            if (search != null)
-            {
-                if (_customer.GetAll().Any(c => c.FirstName.Equals(search)))
-                {
-                    return RedirectToAction(nameof(Details), new { fName = search });
-                }
-                return View();
-            }
-            return View();
-        }
+        //public IActionResult Search (string search = null)
+        //{
+        //    if (search != null)
+        //    {
+        //        if (_customer.GetAll().Any(c => c.FirstName.Equals(search)))
+        //        {
+        //            return RedirectToAction(nameof(Index));
+        //        }
+        //        return View();
+        //    }
+        //    return View();
+        //}
 
         public IActionResult Edit(int id)
         {

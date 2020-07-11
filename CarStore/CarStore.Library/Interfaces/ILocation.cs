@@ -13,5 +13,9 @@ namespace CarStore.Library.Interfaces
         void AddLocation(Location location);
 
         void Update(Location location);
+
+        public IEnumerable<Location> GetLocations(string search = null);
+
+        public void DeleteLocation(int locationId);
     }
 }

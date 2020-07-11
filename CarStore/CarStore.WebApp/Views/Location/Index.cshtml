@@ -6,3 +6,58 @@
 @{
     ViewData["Title"] = "Index";
 }
+
+    <div class="text-center">
+
+        <h1>Current Locations</h1>
+
+        <div>
+            <form asp-action="Index" method="GET" class="form-inline">
+                <label class="sr-only" for="search">Search Location:</label>
+                <input type="search" class="form-control mb-2 mr-sm-2 mb-sm-0" id="search" name="search" placeholder="Search" />
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+
+        <p>
+            <br />
+            <a asp-action="Create">Add New Locaiton</a>
+            <br />
+        </p>
+
+        <div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.LocationId)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.LocationName)
+                        </th>
+                        <th>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LocationId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LocationName)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Edit", "Edit", new { id = item.LocationId }) |
+                                @Html.ActionLink("Details", "Details", new { id = item.LocationId }) |
+                                @Html.ActionLink("Delete", "Delete", new { id = item.LocationId })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>

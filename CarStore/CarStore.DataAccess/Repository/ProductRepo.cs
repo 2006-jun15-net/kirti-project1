@@ -17,6 +17,10 @@ namespace CarStore.DataAccess.Repository
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
+        /// <summary>
+        /// add new product
+        /// </summary>
+        /// <param name="product"></param>
         public void AddProduct(Product product)
         {
             var addProduct = new Model.Product
@@ -28,6 +32,7 @@ namespace CarStore.DataAccess.Repository
             _context.Product.Add(addProduct);
             _context.SaveChanges();
         }
+
 
         public Dictionary<Product, int> OrderedProducts(int orderId)
         {

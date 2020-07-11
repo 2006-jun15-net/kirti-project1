@@ -1,22 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace CarStore.WebApp.Models
 {
     public class CustomerViewModel
     {
-        [Display(Name = "ID")]
+        [Display(Name = "Customer ID")]
         [Required]
         public int CustomerId { get; set; }
 
         [Display(Name = "First Name")]
-        [MaxLength(26)]
+        [StringLength(26, MinimumLength = 1)]
         [Required]
         public string FirstName { get; set; }
 
         [Display(Name = "Last Name")]
-        [MaxLength(26)]
+        [StringLength(26, MinimumLength = 1)]
         [Required]
         public string LastName { get; set; }
+
+        public IEnumerable<OrderViewModel> Orders { get; set; }
     }
 }

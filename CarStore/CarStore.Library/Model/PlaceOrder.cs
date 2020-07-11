@@ -23,7 +23,7 @@ namespace CarStore.Library.Model
             Location = location ?? throw new ArgumentNullException(nameof(location));
         }
 
-        public void AddProductsToOrder (Product product, int quantity)
+        public void AddProductsToOrder(Product product, int quantity)
         {
             if (quantity > Location.Stock[product])
                 throw new ArgumentException("Product quantity is more than available stock");
@@ -31,17 +31,19 @@ namespace CarStore.Library.Model
             orderedProducts.Add(product, quantity);
         }
 
-        public Orders NewOrder(Customer customer)
+        public void NewOrder(Customer customer)
         {
+            decimal totalCost = 0;
             foreach (var item in orderedProducts.Keys)
+            {
                 Location.Stock[item] -= orderedProducts[item];
+                totalCost += item.Price * orderedProducts[item];
+            }
 
-            var newOrder = new Orders(Location, orderedProducts, customer);
+            var newOrder = new Orders(Location, orderedProducts, customer, totalCost);
 
             _oders.CreateOrder(newOrder);
             _location.Update(Location);
-
-            return newOrder;
         }
     }
 }

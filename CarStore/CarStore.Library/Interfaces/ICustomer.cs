@@ -14,8 +14,6 @@ namespace CarStore.Library.Interfaces
 
         void AddCustomer(Customer customer);
 
-        void Delete(Customer customer);
-
         void Update(Customer customer);
 
         public void DeleteCustomer(int customerId);

@@ -18,6 +18,10 @@ namespace CarStore.DataAccess.Repository
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
+        /// <summary>
+        /// add new location
+        /// </summary>
+        /// <param name="location"></param>
         public void AddLocation(Location location)
         {
             var addLocation = new Model.Location
@@ -29,6 +33,10 @@ namespace CarStore.DataAccess.Repository
             _context.SaveChanges();
         }
 
+        /// <summary>
+        /// get all locations
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<Location> GetAll()
         {
             var location = _context.Location.ToList();
@@ -40,6 +48,11 @@ namespace CarStore.DataAccess.Repository
             });
         }
 
+        /// <summary>
+        /// get location by id
+        /// </summary>
+        /// <param name="locationId"></param>
+        /// <returns></returns>
         public Location GetById(int locationId)
         {
             var location = _context.Location.Find(locationId);
@@ -51,6 +64,10 @@ namespace CarStore.DataAccess.Repository
             };
         }
 
+        /// <summary>
+        /// update location
+        /// </summary>
+        /// <param name="location"></param>
         public void Update(Location location)
         {
             var updateLocation = _context.Location
@@ -61,6 +78,32 @@ namespace CarStore.DataAccess.Repository
                 updateLocation.Stock.First(l => l.ProductId == item.ProductId)
                     .Inventory = location.Stock[item];
 
+            _context.SaveChanges();
+        }
+
+        /// <summary>
+        /// get locations
+        /// </summary>
+        /// <param name="search"></param>
+        /// <returns></returns>
+        public IEnumerable<Location> GetLocations(string search = null)
+        {
+            IQueryable<Model.Location> items = _context.Location;
+            if (search != null)
+            {
+                items = items.Where(r => r.LocationName.Contains(search));
+            }
+            return items.Select(e => new Location(e.LocationId, e.LocationName));
+        }
+
+        /// <summary>
+        /// delete locations
+        /// </summary>
+        /// <param name="locationId"></param>
+        public void DeleteLocation(int locationId)
+        {
+            Model.Location location = _context.Location.Find(locationId);
+            _context.Remove(location);
             _context.SaveChanges();
         }
     }
