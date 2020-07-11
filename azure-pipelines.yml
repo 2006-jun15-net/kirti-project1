@@ -25,7 +25,7 @@ jobs:
       scannerMode: 'MSBuild'
       projectKey: '2006-jun15-net_kirti-project1'
       projectName: 'Kirti project1 Car Store'
-      extraProperties: 'sonar.exclusions=**/lib/**'
+      # extraProperties: 'sonar.exclusions=**/lib/**'
 
   - script: dotnet build -c Release
     displayName: dotnet build
@@ -45,8 +45,8 @@ jobs:
   #     summaryFileLocation: '$(Agent.TempDirectory)/*/coverage.cobertura.xml'
   #     failIfCoverageEmpty: true
 
-  - script: dotnet build -c Release -o ../publish
-    displayName: dotnet build
+  - script: dotnet publish -c Release -o ../publish
+    displayName: dotnet publish
     workingDirectory: $(solutionPath)
 
   - task: AzureRmWebAppDeployment@4
