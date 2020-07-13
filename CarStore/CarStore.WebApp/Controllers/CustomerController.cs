@@ -68,7 +68,7 @@ namespace CarStore.WebApp.Controllers
                 };
 
                 _customer.AddCustomer(customer);
-
+                TempData["Customer"] = customer.FirstName;
 
                 return RedirectToAction(nameof(Index));
             }
@@ -86,23 +86,65 @@ namespace CarStore.WebApp.Controllers
                 CustomerId = customer.CustomerId,
                 FirstName = customer.FirstName,
                 LastName = customer.LastName,
+                //Orders = customer.Ohistory.Select(c => new OrderViewModel
+                //{
+                //    OrderId = c.OrderId,
+                //    Date = c.OrderDate,
+                //    TotalCost = c.Price,
+                //    OrderLine = (Dictionary<Product, int>)c.OrderLine.Select(s => new OrderlineViewModel
+                //    {
+                //        ProductId = s.Key.ProductId,
+                //        Quantity = s.Value
+                //    })
+                //}).ToList()
                
             };
+            TempData["Customer"] = customer.FirstName;
+
             return View(customerViewModel);
         }
 
-        //public IActionResult Search (string search = null)
-        //{
-        //    if (search != null)
-        //    {
-        //        if (_customer.GetAll().Any(c => c.FirstName.Equals(search)))
-        //        {
-        //            return RedirectToAction(nameof(Index));
-        //        }
-        //        return View();
-        //    }
-        //    return View();
-        //}
+        public IActionResult DetailsNew(int id, bool c)
+        {
+            //var customer = _customer.GetById(id);
+            //var viewModel = new CustomerViewModel
+            //{
+            //    CustomerId = customer.CustomerId,
+            //    FirstName = customer.FirstName,
+            //    LastName = customer.LastName,
+            //    Orders = customer.Ohistory.Select(s => new OrderViewModel
+            //    {
+            //        OrderId = s.OrderId,
+            //        LocationName = s.Location.LocationName,
+            //        Date = s.OrderDate
+            //    })
+            //};
+            //return View(viewModel);
+
+            if (id != 0)
+            {
+                HttpContext.Response.Cookies.Append("CustomerId", $"{id}");
+            }
+            else
+            {
+                id = int.Parse(HttpContext.Request.Cookies["CustomerID"]);
+            }
+            var customer = _customer.GetById(id);
+            var viewModel = new CustomerViewModel
+            {
+                CustomerId = customer.CustomerId,
+                FirstName = customer.FirstName,
+                LastName = customer.LastName,
+                Orders = customer.Ohistory.Select(s => new OrderViewModel
+                {
+                    OrderId = s.OrderId,
+                    LocationName = s.Location.LocationName,
+                    Date = s.OrderDate
+                })
+            };
+            return View(viewModel);
+
+        }
 
         public IActionResult Edit(int id)
         {

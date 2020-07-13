@@ -5,6 +5,7 @@ using CarStore.DataAccess.Model;
 using CarStore.Library.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Location = CarStore.Library.Model.Location;
+using Product = CarStore.Library.Model.Product;
 
 namespace CarStore.DataAccess.Repository
 {
@@ -105,6 +106,35 @@ namespace CarStore.DataAccess.Repository
             Model.Location location = _context.Location.Find(locationId);
             _context.Remove(location);
             _context.SaveChanges();
+        }
+
+        /// <summary>
+        /// get each product's inventory at that location
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Dictionary<Product, int> GetProducts(int id)
+        {
+            Dictionary<Product, int> locationInventory = new Dictionary<Product, int>();
+
+            var entity = _context.Location
+                .Include(s => s.Stock)
+                .First(l => l.LocationId == id);
+
+            foreach (var item in entity.Stock)
+            {
+                var product = _context.Product.Find(item.ProductId);
+
+                Product countProducts = new Product
+                {
+                    ProductId = product.ProductId,
+                    ProductName = product.ProductName,
+                    Price = product.Price
+                };
+
+                locationInventory.Add(countProducts, item.Inventory);
+            }
+            return locationInventory;
         }
     }
 }

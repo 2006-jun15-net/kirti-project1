@@ -35,7 +35,7 @@ namespace CarStore.DataAccess.Repository
             };
 
             _context.Orders.Add(addOrder);
-            //_context.SaveChanges();
+            _context.SaveChanges();
 
             foreach (var item in order.OrderLine.Keys)
             {
@@ -64,14 +64,14 @@ namespace CarStore.DataAccess.Repository
                 o.OrderId,
                 o.OrderDate,
 
-                new Library.Model.Customer
+                new Cusotmer
                 {
                     CustomerId = o.Customer.CustomerId,
                     FirstName = o.Customer.FirstName,
                     LastName = o.Customer.LastName
                 },
 
-                new Library.Model.Location
+                new Location
                 {
                     LocationId = o.Location.LocationId,
                     LocationName = o.Location.LocationName
@@ -112,8 +112,114 @@ namespace CarStore.DataAccess.Repository
                 },
                 Price = entity.Price
             };
-            order.OrderLine = productRepo.OrderedProducts(entity.OrderId);
+            order.OrderLine = OrderedProducts(entity.OrderId);
             return order;
+        }
+
+        /// <summary>
+        /// get the order history of customer and location
+        /// </summary>
+        /// <param name="historyType"></param>
+        /// <returns></returns>
+        public IEnumerable<Orders> OrderHistory(object historyType)
+        {
+            ProductRepo productRepo = new ProductRepo(_context);
+
+            if (historyType is Location)
+            {
+                Location location = (Location)historyType;
+
+                var orderHistory = _context.Orders
+                    .Include(o => o.Location)
+                    .Include(o => o.Customer)
+                    .Where(o => o.CustomerId == location.LocationId);
+
+                var orders = orderHistory.Select(o => new Orders(
+                    o.OrderId,
+                    o.OrderDate,
+                    new Cusotmer
+                    {
+                        CustomerId = o.Customer.CustomerId,
+                        FirstName = o.Customer.FirstName,
+                        LastName = o.Customer.LastName
+                    },
+                    new Location
+                    {
+                        LocationId = o.Location.LocationId,
+                        LocationName = o.Location.LocationName
+                    },
+
+                    o.Price
+                ));
+
+                var orderList = orders.ToList();
+                foreach (var item in orderList)
+                {
+                    item.OrderLine = OrderedProducts(item.OrderId);
+                }
+            }
+            else if (historyType is Cusotmer)
+            {
+                Customer customer = (Customer)historyType;
+
+                var customerHistory = _context.Orders
+                    .Include(o => o.Location)
+                    .Include(o => o.Customer)
+                    .Where(o => o.CustomerId == customer.CustomerId);
+
+                var customerOrders = customerHistory.Select(o => new Orders(
+                   o.OrderId,
+                   o.OrderDate,
+
+                   new Cusotmer
+                   {
+                       CustomerId = o.Customer.CustomerId,
+                       FirstName = o.Customer.FirstName,
+                       LastName = o.Customer.LastName
+                   },
+
+                   new Location
+                   {
+                       LocationId = o.Location.LocationId,
+                       LocationName = o.Location.LocationName
+                   },
+
+                   o.Price
+               ));
+
+                var orderList = customerOrders.ToList();
+                foreach (var item in orderList)
+                {
+                    item.OrderLine = OrderedProducts(item.OrderId);
+                }
+                return customerOrders;
+            }
+            return null;
+        }
+
+        public Dictionary<Library.Model.Product, int> OrderedProducts(int orderId)
+        {
+            Dictionary<Library.Model.Product, int> productsInOrder = new Dictionary<Library.Model.Product, int>();
+
+            var order = _context.Orders
+                .Include(o => o.OrderLine)
+                .First(o => o.OrderId == orderId);
+
+            foreach (var item in order.OrderLine)
+            {
+                var purchasedProduct = _context.Product.Find(item.ProductId);
+
+                Library.Model.Product product = new Library.Model.Product
+                {
+                    ProductId = purchasedProduct.ProductId,
+                    ProductName = purchasedProduct.ProductName,
+                    Price = purchasedProduct.Price
+                };
+
+                productsInOrder.Add(product, item.Quantity);
+            }
+
+            return productsInOrder;
         }
     }
 }

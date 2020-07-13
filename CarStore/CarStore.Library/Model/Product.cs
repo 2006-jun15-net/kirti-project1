@@ -15,6 +15,13 @@ namespace CarStore.Library.Model
         {
         }
 
+        public Product(int id, string name, decimal price)
+        {
+            ProductId = id;
+            ProductName = name;
+            Price = price;
+        }
+
         /// <summary>
         /// product id
         /// </summary>
@@ -40,13 +47,8 @@ namespace CarStore.Library.Model
         /// </summary>
         public decimal Price
         {
-            get => _price;
-            set
-            {
-                if (_price <= 0)
-                    throw new ArgumentException("Price cannot be less than 0", nameof(value));
-                _price = value;
-            }
+            get;
+            set;
         }
 
     }

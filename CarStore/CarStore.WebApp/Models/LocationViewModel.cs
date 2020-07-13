@@ -15,6 +15,6 @@ namespace CarStore.WebApp.Models
         [Required]
         public string LocationName { get; set; }
 
-        public IEnumerable<OrderViewModel> Orders { get; set; }
+        public List<OrderViewModel> Ohistory { get; set; }
     }
 }

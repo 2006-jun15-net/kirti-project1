@@ -8,6 +8,7 @@ using CarStore.Library.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,6 +36,8 @@ namespace CarStore.WebApp
             services.AddScoped<ILocation, LocationRepo>();
             services.AddScoped<IProduct, ProductRepo>();
             services.AddScoped<IStock, StockRepo>();
+           
+           
 
             services.AddControllersWithViews();
         }
@@ -54,6 +57,7 @@ namespace CarStore.WebApp
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseCookiePolicy(); // <- this
 
             app.UseRouting();
 

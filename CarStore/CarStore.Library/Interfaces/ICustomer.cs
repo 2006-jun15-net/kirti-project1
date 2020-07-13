@@ -12,6 +12,8 @@ namespace CarStore.Library.Interfaces
 
         Customer GetById(int id);
 
+        Customer GetByName(string fName);
+
         void AddCustomer(Customer customer);
 
         void Update(Customer customer);

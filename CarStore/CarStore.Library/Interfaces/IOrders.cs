@@ -10,6 +10,11 @@ namespace CarStore.Library.Interfaces
 
         void CreateOrder(Orders order);
 
-        public Orders GetById(int id);
+        Orders GetById(int id);
+
+        IEnumerable<Orders> OrderHistory(object historyType);
+
+        public Dictionary<Product, int> OrderedProducts(int orderId);
+
     }
 }

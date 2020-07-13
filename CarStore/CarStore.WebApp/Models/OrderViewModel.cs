@@ -11,13 +11,9 @@ namespace CarStore.WebApp.Models
         [Required]
         public int OrderId { get; set; }
 
-        [Display(Name = "Location ID")]
+        [Display(Name = "Location")]
         [Required]
-        public int LocationId { get; set; }
-
-        [Display(Name = "Cusotmer ID")]
-        [Required]
-        public int CustomerId { get; set; }
+        public string LocationName { get; set; }
 
         [Display(Name = "Order Date")]
         [Required]

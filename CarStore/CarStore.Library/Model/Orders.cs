@@ -36,7 +36,7 @@ namespace CarStore.Library.Model
             Price = totalPrice;
         }
 
-        public Orders (Location location, Dictionary<Product, int> orderedProducts, Customer customer, decimal totalPrice) : this (location, DateTime.Now, orderedProducts, customer, totalPrice)
+        public Orders (AddProducts orderInCart, Customer customer, decimal totalPrice) : this(orderInCart.Location, DateTime.Now, orderInCart.cart, customer, totalPrice)
         {
         }
 
@@ -80,14 +80,8 @@ namespace CarStore.Library.Model
         /// </summary>
         public decimal Price
         {
-            get => _price;
-            set
-            {
-                if (value <= 0)
-                    throw new ArgumentException("price cannot be less than 1", nameof(value));
-
-                _price = value;
-            }
+            get;
+            set;
         }
 
         /// <summary>

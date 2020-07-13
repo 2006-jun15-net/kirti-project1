@@ -34,29 +34,39 @@ namespace CarStore.DataAccess.Repository
         }
 
 
-        public Dictionary<Product, int> OrderedProducts(int orderId)
+        //public Dictionary<Product, int> OrderedProducts(int orderId)
+        //{
+        //    Dictionary<Product, int> productsInOrder = new Dictionary<Product, int>();
+
+        //    var order = _context.Orders
+        //        .Include(o => o.OrderLine)
+        //        .First(o => o.OrderId == orderId);
+
+        //    foreach (var item in order.OrderLine)
+        //    {
+        //        var purchasedProduct = _context.Product.Find(item.ProductId);
+
+        //        Product product = new Product
+        //        {
+        //            ProductId = purchasedProduct.ProductId,
+        //            ProductName = purchasedProduct.ProductName,
+        //            Price = purchasedProduct.Price
+        //        };
+
+        //        productsInOrder.Add(product, item.Quantity);
+        //    }
+
+        //    return productsInOrder;
+        //}
+
+        public IEnumerable<Product> GetProducts(string search = null)
         {
-            Dictionary<Product, int> productsInOrder = new Dictionary<Product, int>();
-
-            var order = _context.Orders
-                .Include(o => o.OrderLine)
-                .First(o => o.OrderId == orderId);
-
-            foreach (var item in order.OrderLine)
+            IQueryable<Model.Product> items = _context.Product;
+            if (search != null)
             {
-                var purchasedProduct = _context.Product.Find(item.ProductId);
-
-                Product product = new Product
-                {
-                    ProductId = purchasedProduct.ProductId,
-                    ProductName = purchasedProduct.ProductName,
-                    Price = purchasedProduct.Price
-                };
-
-                productsInOrder.Add(product, item.Quantity);
+                items = items.Where(r => r.ProductName.Contains(search));
             }
-
-            return productsInOrder;
+            return items.Select(e => new Product(e.ProductId, e.ProductName, e.Price));
         }
     }
 }

@@ -112,5 +112,17 @@ namespace CarStore.DataAccess.Repository
             _context.Remove(customer);
             _context.SaveChanges();
         }
+
+        public Customer GetByName(string fName)
+        {
+            Model.Customer customer = _context.Customer.First(c => c.FirstName.Equals(fName));
+            return new Customer
+            {
+                CustomerId = customer.CustomerId,
+                FirstName = customer.FirstName,
+                LastName = customer.LastName
+
+            };
+        }
     }
 }
