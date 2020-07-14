@@ -120,62 +120,33 @@ namespace CarStore.WebApp.Controllers
             }
         }
 
-        //public IActionResult Details(int id)
-        //{
-        //    var location = _locaiton.GetById(id);
-        //    var customerViewModel = new LocationViewModel
-        //    {
-        //        LocationId = location.LocationId,
-        //        LocationName = location.LocationName
-        //    };
-        //    return View(customerViewModel);
-        //}
-
-        public IActionResult LocationOrderHistory()
+        public IActionResult Details(int id)
         {
-            ViewBag.locations = _locaiton.GetAll();
-
-            return View(new LocationViewModel());
-        }
-
-        [HttpPost]
-        public IActionResult LocationOrderHistory(int StoreId)
-        {
-            ViewBag.locations = _locaiton.GetAll();
-            var location = _locaiton.GetById(StoreId);
-            LocationViewModel viewModel = new LocationViewModel
+            var location = _locaiton.GetById(id);
+            var customerViewModel = new LocationViewModel
             {
                 LocationId = location.LocationId,
-                LocationName = location.LocationName,
+                LocationName = location.LocationName
             };
-            var orderHistory = _orders.OrderHistory(location);
-            viewModel.Ohistory = orderHistory.Select(o => new OrderViewModel
-            {
-                OrderId = o.OrderId,
-                Date = (DateTime)o.OrderDate,
-                LocationName = o.Location.LocationName,
-                CustomerName = o.Customer.FirstName,
-                TotalCost = o.Price
-
-            }).ToList();
-            return View(viewModel);
-
+            return View(customerViewModel);
         }
 
-        public IActionResult Details(int OrderId)
-        {
-            Orders order = _orders.GetById(OrderId);
-            OrderViewModel orderDetails = new OrderViewModel
-            {
-                OrderId = order.OrderId,
-                Date = (DateTime)order.OrderDate,
-                OrderLine = order.OrderLine,
-                LocationName = order.Location.LocationName,
-                CustomerName = order.Customer.FirstName,
-                TotalCost = order.Price
-            };
-            return View(orderDetails);
 
-        }
+
+        //public IActionResult Details(int OrderId)
+        //{
+        //    Orders order = _orders.GetById(OrderId);
+        //    OrderViewModel orderDetails = new OrderViewModel
+        //    {
+        //        OrderId = order.OrderId,
+        //        Date = (DateTime)order.OrderDate,
+        //        OrderLine = order.OrderLine,
+        //        LocationName = order.Location.LocationName,
+        //        CustomerName = order.Customer.FirstName,
+        //        TotalCost = order.Price
+        //    };
+        //    return View(orderDetails);
+
+        //}
     }
 }
