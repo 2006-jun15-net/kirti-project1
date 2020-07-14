@@ -67,12 +67,12 @@ namespace CarStore.WebApp.Controllers
                 if (item.ProductName == null)
                     return RedirectToAction(nameof(Products), new { location.LocationId });
 
-                int quantity = (int)TempData[item.ProductName];
-                if (quantity != 0)
+
+                if (TempData[item.ProductName] != null && (int)TempData[item.ProductName] != 0)
                 {
                     try
                     {
-                        addOrder.AddToCart(item, quantity);
+                        addOrder.AddToCart(item, (int)TempData[item.ProductName]);
                     }
                     catch
                     {
@@ -92,31 +92,6 @@ namespace CarStore.WebApp.Controllers
             catch
             {
                 return RedirectToAction(nameof(Products));
-            }
-        }
-
-        private IActionResult OrderHistory(string fName)
-        {
-            var history = _orders.OrderHistory(_customer.GetByName(fName));
-            List<OrderViewModel> viewModels = new List<OrderViewModel>();
-            if (fName != null)
-            {
-                foreach(var item in history)
-                {
-                    viewModels.Add(new OrderViewModel
-                    {
-                        Date = item.OrderDate,
-                        OrderId = item.OrderId,
-                        OrderLine = item.OrderLine,
-                        LocationName = item.Location.LocationName,
-                        TotalCost = item.Price
-                    });
-                }
-                return View(viewModels);
-            }
-            else
-            {
-                return View();
             }
         }
 

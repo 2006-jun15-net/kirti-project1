@@ -34,9 +34,59 @@
             @Html.DisplayFor(model => model.LastName)
         </dd>
     </dl>
+
+    <div>
+        @if (Model.Orders.Any())
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(Model => Model.Orders.FirstOrDefault().CustomerName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(Model => Model.Orders.FirstOrDefault().OrderId)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(Model => Model.Orders.FirstOrDefault().LocationName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(Model => Model.Orders.FirstOrDefault().Date)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Orders)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CustomerName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.OrderId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LocationName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Date)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Details", "Details", "OrderHistory", new { id = item.OrderId }, null)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+
+    </div>
 </div>
 
 <div>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.CustomerId }) |
-    <a asp-action="Index">Back</a>
+    <div>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.CustomerId }) |
+        <a asp-action="Index">Back</a>
+    </div>
 </div>
+

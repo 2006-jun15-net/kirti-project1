@@ -9,7 +9,7 @@
 <div class="text-center">
 
     <div class="form-group">
-        <h2>Your order location: @Model.LocationName</h2>
+        <h2 style="color:darkblue;">Your order location: @Model.LocationName</h2>
         <table class="table">
             <thead>
                 <tr>
@@ -43,14 +43,14 @@
                 <label id="Products">Product: <select name="ProductId" asp-items="@(new SelectList(Model.Stock.Keys,"ProductId","ProductName"))"></select></label>
                 <label id="QtyLabel" for="quantity">Quantity: </label>
                 <input id="Quantity" type="text" name="quantity" required />
-                <input type="submit" value="Add" class="btn btn-secondary" />
+                <input style="background-color:darkblue;"type="submit" value="Add" class="btn btn-secondary" />
             </div>
         </form>
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     </div>
     <br />
     <div>
-        <h2>Your order receipt</h2>
+        <h2 style="color:darkblue;">Your order receipt</h2>
         <table class="table">
             <thead>
                 <tr>
